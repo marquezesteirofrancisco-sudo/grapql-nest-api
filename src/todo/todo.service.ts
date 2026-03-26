@@ -12,7 +12,28 @@ export class TodoService {
         { id: 1, description: 'Learn NestJS', done: false },
         { id: 2, description: 'Build a GraphQL API', done: true },
         { id: 3, description: 'Deploy the application', done: false },
+        { id: 4, description: 'OTra the application', done: false },
     ];
+
+    get getTotalTodos() {
+        return this.todos.length;
+    }
+
+    get getCompletedTodos() {
+        return this.todos.filter(todo => todo.done === true).length;
+    }
+
+    get getPendingTodos() {
+        return this.todos.filter(todo => todo.done === false).length;
+    }
+
+    getTodosFiltered(done?: boolean) : number {
+
+        if (done === undefined)
+            return this.todos.length;
+
+        return this.todos.filter(todo => todo.done === done).length;
+    }
 
     findAll(statusArgs: StatusArgs ): Todo[] {
 
@@ -75,5 +96,6 @@ export class TodoService {
         return true;
     }
 
+ 
 
 }

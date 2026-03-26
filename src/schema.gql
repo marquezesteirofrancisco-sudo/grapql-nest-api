@@ -26,6 +26,9 @@ type Query {
 
   """Get a todo by id"""
   todo(id: Int!): Todo!
+  totalTodos: Int!
+  completedTodos: Int!
+  pendingTodos: Int!
 }
 
 type Mutation {
