@@ -1,0 +1,50 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Todo {
+  id: Int!
+  description: String!
+  done: Boolean!
+}
+
+type Query {
+  """Devuelve un saludo"""
+  hola_mundo: String!
+
+  """esto es la descripcion"""
+  numero_aleatorio: Float!
+
+  """Devuelve un numero entero aleatorio de 0 a 10 """
+  randomFromZeroTo(to: Int): Int!
+
+  """Get all todos"""
+  todos: [Todo!]!
+
+  """Get a todo by id"""
+  todo(id: Int!): Todo!
+}
+
+type Mutation {
+  """Create a new todo"""
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+
+  """Update an existing todo"""
+  updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
+}
+
+input CreateTodoInput {
+  """La descripcion de la tarea"""
+  description: String!
+}
+
+input UpdateTodoInput {
+  """El ID de la tarea a actualizar"""
+  id: Int!
+
+  """La descripcion de la tarea"""
+  description: String
+
+  """Indica si la tarea esta completada o no"""
+  done: Boolean
+}
