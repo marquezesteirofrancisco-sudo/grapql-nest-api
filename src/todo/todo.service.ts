@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Todo } from './entity/todo.entity';
 import { CreateTodoInput } from './dto/inputs/create-todo.input';
 import { UpdateTodoInput } from './dto/inputs/update-todo.input';
+import { StatusArgs } from './dto/args/status.args';
 
 @Injectable()
 export class TodoService {
@@ -9,11 +10,16 @@ export class TodoService {
 
     private todos: Todo[] = [
         { id: 1, description: 'Learn NestJS', done: false },
-        { id: 2, description: 'Build a GraphQL API', done: false },
+        { id: 2, description: 'Build a GraphQL API', done: true },
         { id: 3, description: 'Deploy the application', done: false },
     ];
 
-    findAll(): Todo[] {
+    findAll(statusArgs: StatusArgs ): Todo[] {
+
+        if (statusArgs.status !== undefined) {
+            return this.todos.filter(todo => todo.done === statusArgs.status);
+        }
+
         return this.todos;
     }
 
@@ -39,9 +45,9 @@ export class TodoService {
         return todo;
     }
 
-    update(updateTodoInput: UpdateTodoInput) {
+    update(id: number, updateTodoInput: UpdateTodoInput) {
 
-        const {id, description, done} = updateTodoInput;
+        const {description, done} = updateTodoInput;
 
         const todo = this.findOne(id);  
 
@@ -57,4 +63,17 @@ export class TodoService {
 
         return todo;
     }
+
+    delete(id: number): Boolean {
+
+        const index = this.todos.findIndex(todo => todo.id === id);
+        if (index === -1) {
+            throw new NotFoundException(`Todo with id ${id} not found`);
+        }
+
+        this.todos.splice(index, 1);
+        return true;
+    }
+
+
 }

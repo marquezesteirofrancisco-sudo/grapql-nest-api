@@ -19,7 +19,10 @@ type Query {
   randomFromZeroTo(to: Int): Int!
 
   """Get all todos"""
-  todos: [Todo!]!
+  todos(
+    """Filter todos by their completion status"""
+    status: Boolean
+  ): [Todo!]!
 
   """Get a todo by id"""
   todo(id: Int!): Todo!
@@ -31,6 +34,9 @@ type Mutation {
 
   """Update an existing todo"""
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
+
+  """Remove a todo by id."""
+  removeTodo(id: Int!): Boolean!
 }
 
 input CreateTodoInput {

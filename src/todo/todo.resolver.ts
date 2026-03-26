@@ -3,8 +3,9 @@ import { Todo } from './entity/todo.entity';
 import { TodoService } from './todo.service';
 import { CreateTodoInput } from './dto/inputs/create-todo.input';
 import { UpdateTodoInput } from './dto/inputs/update-todo.input';
+import { StatusArgs } from './dto/args/status.args';
 
-@Resolver()
+@Resolver(() => Todo)
 export class TodoResolver {
 
     constructor(
@@ -13,8 +14,14 @@ export class TodoResolver {
     ) {}
 
     @Query(() => [Todo], { name: 'todos', description: 'Get all todos' })
-    findAll() : Todo[] {
-        return this.todoService.findAll();
+    findAll(
+
+        //@Args('listTodoArgs', { type: () => ListTodoArgs, nullable: true }) listTodoArgs: ListTodoArgs
+
+        @Args() statusArgs: StatusArgs
+
+    ) : Todo[] {
+        return this.todoService.findAll(statusArgs);
     }
 
     @Query(()=> Todo, { name:'todo', description: 'Get a todo by id'})
@@ -37,11 +44,14 @@ export class TodoResolver {
     updateTodo(
         @Args('updateTodoInput') updateTodoInput: UpdateTodoInput  
     ) {
-        return this.todoService.update(updateTodoInput);
+        return this.todoService.update(updateTodoInput.id, updateTodoInput);
     }
 
-    removeTodo(id: string) {
-        return { id, title: `Todo ${id}`, completed: false };
+    @Mutation(() => Boolean, { name: 'removeTodo', description: 'Remove a todo by id.' })
+    removeTodo(
+        @Args('id', { type: () => Int, nullable: false }) id: number
+    ) {
+        return this.todoService.delete(id);
     }
 
 
